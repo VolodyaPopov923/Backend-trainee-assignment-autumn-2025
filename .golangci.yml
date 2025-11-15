@@ -1,0 +1,45 @@
+run:
+  timeout: 5m            # увеличенный таймаут для больших проектов
+  tests: true            # проверяем и тестовые файлы тоже
+
+linters:
+  enable:
+    - govet              # стандартный статический анализ
+    - staticcheck        # глубокий анализ ошибок
+    - errcheck           # проверка необработанных ошибок
+    - ineffassign        # неэффективные присваивания
+    - unused             # неиспользуемые переменные/импорты
+    - gosimple           # упрощение Go-кода
+    - gocyclo            # проверка цикломатической сложности
+    - gofumpt            # строгий форматтер
+    - revive             # продвинутый стиль-контроль
+    - misspell           # опечатки в коде/комментах
+    - sqlclosecheck      # не закрытые SQL-ресурсы
+    - bodyclose          # обязательно закрывать http.Body
+
+  disable:
+    - gocritic           # часто ругается “слишком много”
+    - wsl                # стиль пустых строк — на любителя
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gocyclo        # тесты не обязаны быть безсложными
+
+    - text: "should have comment"  # отключаем требование комментариев на экспортируемые сущности
+      linters:
+        - revive
+
+  max-same-issues: 10
+  max-issues-per-linter: 50
+
+linters-settings:
+  gocyclo:
+    min-complexity: 15
+
+  revive:
+    severity: warning
+    rules:
+      - name: indent-error-flow
+      - name: errorf
