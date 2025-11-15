@@ -7,6 +7,7 @@ tags:
   - name: Teams
   - name: Users
   - name: PullRequests
+  - name: Stats
   - name: Health
 
 components:
@@ -120,6 +121,19 @@ components:
         status:
           type: string
           enum: [OPEN, MERGED]
+    AssignmentStats:
+      type: object
+      properties:
+        by_user:
+          type: object
+          additionalProperties:
+            type: integer
+          description: Количество назначений по каждому пользователю (user_id -> count)
+        by_pr:
+          type: object
+          additionalProperties:
+            type: integer
+          description: Количество ревьюверов по каждому PR (pr_id -> count)
 
 paths:
   /team/add:
@@ -438,3 +452,58 @@ paths:
                     pull_request_name: Add search
                     author_id: u1
                     status: OPEN
+
+  /stats/assignments:
+    get:
+      tags: [Stats]
+      summary: Получить статистику назначений ревьюверов
+      security:
+        - AdminToken: []
+        - UserToken: []
+      parameters:
+        - name: group_by
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [user, pr, all]
+            default: all
+          description: Группировка статистики (user - по пользователям, pr - по PR, all - обе)
+      responses:
+        '200':
+          description: Статистика назначений ревьюверов
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignmentStats'
+              examples:
+                byUser:
+                  summary: Статистика по пользователям
+                  value:
+                    by_user:
+                      u1: 5
+                      u2: 3
+                      u3: 7
+                byPR:
+                  summary: Статистика по PR
+                  value:
+                    by_pr:
+                      pr-1001: 2
+                      pr-1002: 2
+                      pr-1003: 1
+                all:
+                  summary: Полная статистика
+                  value:
+                    by_user:
+                      u1: 5
+                      u2: 3
+                      u3: 7
+                    by_pr:
+                      pr-1001: 2
+                      pr-1002: 2
+                      pr-1003: 1
+        '500':
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ErrorResponse' }
