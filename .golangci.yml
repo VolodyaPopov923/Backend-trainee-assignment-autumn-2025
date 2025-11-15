@@ -1,33 +1,33 @@
 run:
-  timeout: 5m            # увеличенный таймаут для больших проектов
-  tests: true            # проверяем и тестовые файлы тоже
+  timeout: 5m
+  tests: true
 
 linters:
   enable:
-    - govet              # стандартный статический анализ
-    - staticcheck        # глубокий анализ ошибок
-    - errcheck           # проверка необработанных ошибок
-    - ineffassign        # неэффективные присваивания
-    - unused             # неиспользуемые переменные/импорты
-    - gosimple           # упрощение Go-кода
-    - gocyclo            # проверка цикломатической сложности
-    - gofumpt            # строгий форматтер
-    - revive             # продвинутый стиль-контроль
-    - misspell           # опечатки в коде/комментах
-    - sqlclosecheck      # не закрытые SQL-ресурсы
-    - bodyclose          # обязательно закрывать http.Body
+    - govet
+    - staticcheck
+    - errcheck
+    - ineffassign
+    - unused
+    - gosimple
+    - gocyclo
+    - gofumpt
+    - revive
+    - misspell
+    - sqlclosecheck
+    - bodyclose
 
   disable:
-    - gocritic           # часто ругается “слишком много”
-    - wsl                # стиль пустых строк — на любителя
+    - gocritic
+    - wsl
 
 issues:
   exclude-rules:
     - path: _test\.go
       linters:
-        - gocyclo        # тесты не обязаны быть безсложными
+        - gocyclo
 
-    - text: "should have comment"  # отключаем требование комментариев на экспортируемые сущности
+    - text: "should have comment"
       linters:
         - revive
 

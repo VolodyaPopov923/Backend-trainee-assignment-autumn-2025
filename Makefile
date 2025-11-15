@@ -22,7 +22,6 @@ test:
 lint:
 	golangci-lint run
 
-# ---- Load test (k6) ----
 load:
 	BASE_URL=http://localhost:8080 k6 run load/k6-pr.js
 

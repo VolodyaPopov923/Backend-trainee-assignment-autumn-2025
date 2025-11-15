@@ -1,4 +1,3 @@
-# --- build stage ---
 FROM golang:1.22-alpine AS build
 WORKDIR /app
 COPY . .
